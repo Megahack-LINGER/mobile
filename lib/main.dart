@@ -63,24 +63,10 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(
-      child: Padding(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                    "https://cdn.discordapp.com/attachments/769682105948438601/775063876395728917/SPOILER_LINGER_WHITE-BLACK.jpg"),
-              ),
-              Text(
-                "Linger",
-                style: TextStyle(fontSize: 18),
-              ),
-            ]),
-      ),
-    ));
+          child: Image.network(
+              "https://cdn.discordapp.com/attachments/769682105948438601/775427679406391336/unknown.png"),
+        ));
   }
 }

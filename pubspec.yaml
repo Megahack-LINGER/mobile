@@ -23,7 +23,7 @@ environment:
 dependencies:
   simple_splashscreen: 
   path_provider: ^1.6.24
-  
+  carousel_slider: ^2.3.1
   
   flutter:
     sdk: flutter

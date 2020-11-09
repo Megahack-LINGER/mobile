@@ -6,7 +6,7 @@ Widget subPage(String pathImage, String text) {
       height: 1000,
       child: Column(
         children: [
-          Image.asset(
+          Image.network(
             pathImage,
             filterQuality: FilterQuality.high,
             fit: BoxFit.contain,
