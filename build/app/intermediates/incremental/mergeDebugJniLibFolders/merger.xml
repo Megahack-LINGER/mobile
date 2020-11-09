@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/mnt/4b879112-b167-4243-945a-61d181d1c3f5/documentos/mobile/flutter/mobile/android/app/src/main/jniLibs"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/mnt/4b879112-b167-4243-945a-61d181d1c3f5/documentos/mobile/flutter/mobile/android/app/src/debug/jniLibs"/></dataSet></merger>
