@@ -1,4 +1,5 @@
 //---- Packages
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:simple_splashscreen/simple_splashscreen.dart';
@@ -25,23 +26,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Map boarding = {"email": false};
+  Map boarding = {"email": null};
+
   Future<File> getData() async {
-    final file = await getApplicationDocumentsDirectory();
-    return File(file.path);
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
   }
 
   _readData() async {
     try {
       final data = await getData();
-      print(data.readAsStringSync());
       setState(() {
-        boarding["email"] = true;
+        boarding = jsonDecode(data.readAsStringSync());
       });
     } catch (e) {
-      setState(() {
-        boarding["email"] = false;
-      });
+      print(e);
     }
   }
 
@@ -56,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Simple_splashscreen(
       context: context,
       splashscreenWidget: Splash(),
-      gotoWidget: boarding["email"] == true ? Nav() : Onboarding(),
+      gotoWidget: boarding["email"] != null ? Nav() : Onboarding(),
       timerInSeconds: 2,
     );
   }

@@ -1,9 +1,12 @@
 //---- Packages
+import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 //---- Screens
 import 'package:linger/src/Nav.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -13,6 +16,22 @@ class Cadastro extends StatefulWidget {
 class _CadastroState extends State<Cadastro> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
+
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  Future<File> getData() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
+  }
+
+  Future saveData() async {
+    final file = await getData();
+    await file.writeAsStringSync(jsonEncode({
+      "email": _controllerEmail.text,
+      "name": _firebaseAuth.currentUser.displayName,
+      "image": _firebaseAuth.currentUser.photoURL
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +121,9 @@ class _CadastroState extends State<Cadastro> {
                                 .createUserWithEmailAndPassword(
                                     email: _controllerEmail.text,
                                     password: _controllerPassword.text);
+
+                            await saveData();
+
                             await Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => Nav()),

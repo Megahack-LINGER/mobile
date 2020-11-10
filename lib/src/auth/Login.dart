@@ -1,6 +1,9 @@
 //---- Packages
+import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 //---- Screens
 import 'package:linger/src/Nav.dart';
@@ -15,6 +18,23 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
+
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  Future<File> getData() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
+  }
+
+  Future saveData() async {
+    final file = await getData();
+    file.writeAsString(jsonEncode({
+      "email": _controllerEmail.text,
+      "name": _firebaseAuth.currentUser.displayName,
+      "image": _firebaseAuth.currentUser.photoURL
+    }));
+    print("salvo");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,15 +114,15 @@ class _LoginState extends State<Login> {
                                   .signInWithEmailAndPassword(
                                       email: _controllerEmail.text,
                                       password: _controllerPassword.text);
+
+                              await saveData();
+
                               await Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Nav()),
                                   (route) => false);
                             } catch (e) {
-                              if (e.code == "firebase_auth/user-not-found") {
-                                print("Usuário não encontrado");
-                              }
                               print(e);
                             }
                           },
