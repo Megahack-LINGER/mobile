@@ -53,6 +53,8 @@ class _HomeState extends State<Home> {
                 width: size.width,
                 height: size.height * 0.25,
                 child: ListView.builder(
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                         child: Card(
@@ -85,13 +87,13 @@ class _HomeState extends State<Home> {
                       ),
                     ));
                   },
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
                 )),
             Container(
                 width: size.width,
                 height: size.height * 0.25,
                 child: ListView.builder(
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                         child: Card(
@@ -122,8 +124,6 @@ class _HomeState extends State<Home> {
                       ),
                     ));
                   },
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
                 )),
           ],
         ),

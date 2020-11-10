@@ -1,4 +1,8 @@
+//---- Packages
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+//---- Screens
 import 'package:linger/src/Nav.dart';
 
 class Cadastro extends StatefulWidget {
@@ -7,6 +11,9 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,6 +59,7 @@ class _CadastroState extends State<Cadastro> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(40)),
                     child: TextField(
+                      controller: _controllerEmail,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email, color: Colors.blue),
@@ -67,6 +75,7 @@ class _CadastroState extends State<Cadastro> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(40)),
                     child: TextField(
+                      controller: _controllerPassword,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -86,11 +95,23 @@ class _CadastroState extends State<Cadastro> {
                     height: size.height * 0.05,
                     child: RaisedButton(
                         splashColor: Colors.blue[100],
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => Nav()),
-                              (route) => false);
+                        onPressed: () async {
+                          print(_controllerPassword.text);
+                          try {
+                            await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: _controllerEmail.text,
+                                    password: _controllerPassword.text);
+                            await Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Nav()),
+                                (route) => false);
+                          } catch (e) {
+                            if (e.code == "firebase_auth/user-not-found") {
+                              print("Usuário não encontrado");
+                            }
+                            print(e);
+                          }
                         },
                         child: Text("Cadastrar")))),
           ],

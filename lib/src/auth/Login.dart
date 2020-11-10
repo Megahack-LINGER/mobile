@@ -1,4 +1,8 @@
+//---- Packages
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+//---- Screens
 import 'package:linger/src/Nav.dart';
 import 'package:linger/src/auth/Cadastro.dart';
 import 'package:linger/src/auth/ForgoutPassword.dart';
@@ -9,6 +13,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,6 +52,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(40)),
                       child: TextField(
                         keyboardType: TextInputType.emailAddress,
+                        controller: _controllerEmail,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email, color: Colors.blue),
                             border: InputBorder.none,
@@ -61,6 +69,7 @@ class _LoginState extends State<Login> {
                       child: TextField(
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: true,
+                        controller: _controllerPassword,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.vpn_key, color: Colors.blue),
                             border: InputBorder.none,
@@ -78,11 +87,24 @@ class _LoginState extends State<Login> {
                       height: size.height * 0.05,
                       child: RaisedButton(
                           splashColor: Colors.blue[100],
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => Nav()),
-                                (route) => false);
+                          onPressed: () async {
+                            print(_controllerPassword.text);
+                            try {
+                              await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: _controllerEmail.text,
+                                      password: _controllerPassword.text);
+                              await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Nav()),
+                                  (route) => false);
+                            } catch (e) {
+                              if (e.code == "firebase_auth/user-not-found") {
+                                print("Usuário não encontrado");
+                              }
+                              print(e);
+                            }
                           },
                           child: Text("Logar")))),
               Divider(color: Colors.blue),
