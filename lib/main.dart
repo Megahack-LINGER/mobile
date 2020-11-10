@@ -65,8 +65,15 @@ class Splash extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Image.network(
-              "https://cdn.discordapp.com/attachments/769682105948438601/775427679406391336/unknown.png"),
-        ));
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.network(
+                "https://cdn.discordapp.com/attachments/769682105948438601/775427679406391336/unknown.png"),
+            Text("A ferramenta do momento ideial",
+                style: TextStyle(fontSize: 22))
+          ],
+        )));
   }
 }

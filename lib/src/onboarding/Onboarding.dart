@@ -1,9 +1,10 @@
 //---- Packages
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:linger/src/Nav.dart';
 
 //---- Screens
+import 'package:linger/src/auth/Login.dart';
+
+//---- Widgets
 import 'package:linger/src/onboarding/widgets/subPage.dart';
 
 class Onboarding extends StatefulWidget {
@@ -54,7 +55,7 @@ class _OnboardingState extends State<Onboarding> {
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => Nav()),
+                              MaterialPageRoute(builder: (context) => Login()),
                               (route) => false);
                         },
                         icon: Icon(
