@@ -15,6 +15,7 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.blue[300],
         body: SingleChildScrollView(
@@ -26,8 +27,8 @@ class _OnboardingState extends State<Onboarding> {
               padding: EdgeInsets.only(
                 top: 250,
               ),
-              width: 1000,
-              height: 700,
+              width: size.width,
+              height: size.height * 0.9,
               child: PageView(
                 children: [
                   subPage(
@@ -62,7 +63,7 @@ class _OnboardingState extends State<Onboarding> {
                           Icons.check,
                           color: Colors.blue,
                         ),
-                        label: Text("Ir"))))
+                        label: Text("Ir")))),
           ],
         )));
   }

@@ -64,18 +64,73 @@ class _SplashScreenState extends State<SplashScreen> {
 class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            ClipPath(
+              clipper: CustomTriangleClipperTop(),
+              child: Container(
+                width: size.width,
+                height: size.height * 0.09,
+                color: Colors.blue[700],
+              ),
+            ),
+            Divider(
+              color: Colors.white,
+              height: size.height * 0.08,
+            ),
             Image.network(
-                "https://cdn.discordapp.com/attachments/769682105948438601/775427679406391336/unknown.png"),
+                "https://cdn.discordapp.com/attachments/769682105948438601/776180627929169980/OSMCV21-removebg-preview.png"),
             Text("A ferramenta do momento ideial",
-                style: TextStyle(fontSize: 22))
+                style: TextStyle(fontSize: 22)),
+            Divider(
+              color: Colors.white,
+              height: size.height * 0.206,
+            ),
+            ClipPath(
+              clipper: CustomTriangleClipperBottom(),
+              child: Container(
+                width: size.width,
+                height: size.height * 0.09,
+                color: Colors.blue[700],
+              ),
+            )
           ],
         )));
   }
+}
+
+class CustomTriangleClipperTop extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    //---- width para height
+    path.lineTo(size.width / 2, 0);
+    path.lineTo(0, size.height);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class CustomTriangleClipperBottom extends CustomClipper<Path> {
+  Path getClip(Size size) {
+    final path = Path();
+    //---- width para height
+    path.moveTo(size.width, size.height * 0.1);
+
+    path.lineTo(size.width / 2, size.height);
+    path.lineTo(size.width, size.height);
+
+    return path;
+  }
+
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

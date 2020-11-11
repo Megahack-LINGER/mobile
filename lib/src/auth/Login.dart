@@ -40,27 +40,16 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: size.width,
-                height: size.height * 0.25,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            "https://cdn.discordapp.com/attachments/769682105948438601/775427679406391336/unknown.png")),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(60),
-                        bottomRight: Radius.circular(60))),
+              Image.network(
+                "https://cdn.discordapp.com/attachments/769682105948438601/775794281654779914/SPOILER_LINGER_VETOR.png",
               ),
-              Divider(
-                height: size.height * 0.2,
-                color: Colors.blue,
-              ),
+              Text("Bem vindo de volta"),
+              Divider(color: Colors.white),
               Container(
                 padding: EdgeInsets.all(16),
                 child: Column(
@@ -75,12 +64,13 @@ class _LoginState extends State<Login> {
                         controller: _controllerEmail,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email, color: Colors.blue),
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue)),
                             hintText: "Digite seu email",
                             contentPadding: EdgeInsets.all(18)),
                       ),
                     ),
-                    Divider(height: 20, color: Colors.blue),
+                    Divider(height: 20, color: Colors.white),
                     Container(
                       height: size.height * 0.065,
                       decoration: BoxDecoration(
@@ -92,7 +82,8 @@ class _LoginState extends State<Login> {
                         controller: _controllerPassword,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.vpn_key, color: Colors.blue),
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue)),
                             hintText: "Digite sua senha",
                             contentPadding: EdgeInsets.all(18)),
                       ),
@@ -100,60 +91,52 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: Container(
-                      width: size.width * 0.4,
-                      height: size.height * 0.05,
-                      child: RaisedButton(
-                          splashColor: Colors.blue[100],
-                          onPressed: () async {
-                            print(_controllerPassword.text);
-                            try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: _controllerEmail.text,
-                                      password: _controllerPassword.text);
+              Container(
+                  width: size.width * 0.4,
+                  height: size.height * 0.05,
+                  child: RaisedButton(
+                      color: Colors.blue,
+                      splashColor: Colors.blue[100],
+                      onPressed: () async {
+                        print(_controllerPassword.text);
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _controllerEmail.text,
+                                  password: _controllerPassword.text);
 
-                              await saveData();
+                          await saveData();
 
-                              await Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Nav()),
-                                  (route) => false);
-                            } catch (e) {
-                              print(e);
-                            }
-                          },
-                          child: Text("Logar")))),
-              Divider(color: Colors.blue),
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: Container(
-                      width: size.width * 0.4,
-                      height: size.height * 0.05,
-                      child: RaisedButton(
-                          splashColor: Colors.blue[100],
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Cadastro()));
-                          },
-                          child: Text("Cadastrar")))),
-              Divider(color: Colors.blue),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgoutPassword()));
-                  },
-                  child: Text(
-                    "Esqueceu a senha?",
-                    style: TextStyle(color: Colors.white),
-                  ))
+                          await Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Nav()),
+                              (route) => false);
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      child: Text("Login",
+                          style: TextStyle(color: Colors.white)))),
+              Divider(color: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Não tem uma conta?",
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Cadastro()));
+                      },
+                      child: Text(
+                        "Cadastra-se",
+                        style: TextStyle(color: Colors.blue),
+                      ))
+                ],
+              ),
             ],
           ),
         ));
