@@ -122,7 +122,7 @@ class _ProductState extends State<Product> {
                 left: size.width * 0.3,
                 child: Icon(Icons.star, color: Colors.black12)),
             Positioned(
-                top: size.height * 0.37,
+                top: size.height * 0.36,
                 left: size.width * 0.68,
                 child: Container(
                   width: size.width * 0.13,
