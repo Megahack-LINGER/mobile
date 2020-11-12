@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-Widget subPage(String pathImage, String text) {
+Widget subPage(String pathImage, String text, Size size) {
   return Container(
-      width: 1000,
-      height: 1000,
+      width: size.width,
+      height: size.height,
       child: Column(
         children: [
           Image.network(
@@ -11,7 +11,10 @@ Widget subPage(String pathImage, String text) {
             filterQuality: FilterQuality.high,
             fit: BoxFit.contain,
           ),
-          Text(text)
+          Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          )
         ],
       ));
 }
