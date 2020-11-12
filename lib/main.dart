@@ -83,7 +83,9 @@ class Splash extends StatelessWidget {
               height: size.height * 0.08,
             ),
             Image.network(
-                "https://cdn.discordapp.com/attachments/769682105948438601/776180627929169980/OSMCV21-removebg-preview.png"),
+              "https://cdn.discordapp.com/attachments/769682105948438601/776180627929169980/OSMCV21-removebg-preview.png",
+              height: size.height * 0.502,
+            ),
             Text("A ferramenta do momento ideial",
                 style: TextStyle(fontSize: 22)),
             Divider(

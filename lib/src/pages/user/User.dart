@@ -21,7 +21,7 @@ class _UserState extends State<User> {
                   width: size.width,
                   height: size.height * 0.23,
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Color.fromRGBO(33, 150, 243, 1),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40))),
@@ -39,7 +39,7 @@ class _UserState extends State<User> {
                                 : "",
                             filterQuality: FilterQuality.high,
                             fit: BoxFit.fill,
-                            height: size.height * 0.17,
+                            height: size.height * 0.166,
                             width: size.width * 0.35,
                           )),
                     ],
