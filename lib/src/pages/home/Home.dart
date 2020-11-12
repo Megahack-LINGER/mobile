@@ -10,12 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List products = [
-    {"title": "Aluga-se 1 hora de empressora 3D", "price": 2},
-    {"title": "Aluga-se 1 hora de empressora 3D", "price": 2},
-    {"title": "Aluga-se 1 hora de empressora 3D", "price": 2}
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -106,7 +100,8 @@ class _HomeState extends State<Home> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Product(
-                                            dataProduct: products[index]))),
+                                            dataProduct:
+                                                snapshot.data.docs[index]))),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                       side: BorderSide(
@@ -122,7 +117,7 @@ class _HomeState extends State<Home> {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           child: Image.network(
-                                              "https://cdn.pixabay.com/photo/2020/07/17/19/22/landscape-5415202_960_720.jpg",
+                                              "${snapshot.data.docs[index]["image"][0]}",
                                               filterQuality: FilterQuality.high,
                                               fit: BoxFit.contain,
                                               height: size.height * 0.1),
@@ -154,7 +149,8 @@ class _HomeState extends State<Home> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Product(
-                                            dataProduct: products[index]))),
+                                            dataProduct:
+                                                snapshot.data.docs[index]))),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                       side: BorderSide(
@@ -169,7 +165,7 @@ class _HomeState extends State<Home> {
                                             topLeft: Radius.circular(20),
                                             topRight: Radius.circular(20)),
                                         child: Image.network(
-                                            "https://cdn.pixabay.com/photo/2020/07/17/19/22/landscape-5415202_960_720.jpg",
+                                            "${snapshot.data.docs[index]["image"][0]}",
                                             filterQuality: FilterQuality.high,
                                             fit: BoxFit.fill,
                                             width: size.width * 0.9,
