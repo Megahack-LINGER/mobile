@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:linger/src/pages/home/functions/calc_frete.dart';
+import 'package:share/share.dart';
 
 class Product extends StatefulWidget {
   Product({Key key, this.dataProduct}) : super(key: key);
@@ -13,7 +14,7 @@ class Product extends StatefulWidget {
 
 class _ProductState extends State<Product> {
   PageController _pageController = PageController();
-  int _image = 1;
+  int _image = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +27,6 @@ class _ProductState extends State<Product> {
         padding: EdgeInsets.all(16),
         child: Stack(
           children: [
-            Positioned(
-              top: size.height * 0.04,
-              left: size.width * 0.01,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.blue,
-                    size: 38,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ),
-            Positioned(
-              top: size.height * 0.04,
-              left: size.width * 0.4,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.blue,
-                    size: 38,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ),
-            Positioned(
-              top: size.height * 0.04,
-              left: size.width * 0.8,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.blue,
-                    size: 38,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ),
             Container(
               padding: EdgeInsets.all(0),
               width: size.width,
@@ -90,8 +52,50 @@ class _ProductState extends State<Product> {
                       enableInfiniteScroll: false,
                       initialPage: 0)),
             ),
+            //---- Colocado dps de image pois a image anula o button
             Positioned(
-                top: size.height * 0.09,
+              top: size.height * 0.03,
+              left: size.width * 0.01,
+              child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.blue,
+                    size: 38,
+                  ),
+                  onPressed: () {
+                    print("eae");
+                    Navigator.pop(context);
+                  }),
+            ),
+            Positioned(
+              top: size.height * 0.03,
+              left: size.width * 0.4,
+              child: IconButton(
+                  icon: Icon(
+                    Icons.add_shopping_cart,
+                    color: Colors.blue,
+                    size: 38,
+                  ),
+                  onPressed: () {
+                    print("Add Shopping");
+                  }),
+            ),
+            Positioned(
+              top: size.height * 0.03,
+              left: size.width * 0.8,
+              child: IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: Colors.blue,
+                    size: 38,
+                  ),
+                  onPressed: () {
+                    print("Add favorite");
+                  }),
+            ),
+            //------------ end 3 icons
+            Positioned(
+                top: size.height * 0.1,
                 left: size.width * 0.15,
                 child: Container(
                   padding: EdgeInsets.all(8),
@@ -99,7 +103,8 @@ class _ProductState extends State<Product> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text("$_image/${widget.dataProduct["image"].length}"),
+                  child: Text(
+                      "${_image + 1}/${widget.dataProduct["image"].length}"),
                 )),
             Positioned(
                 top: size.height * 0.4,
@@ -132,7 +137,9 @@ class _ProductState extends State<Product> {
                       borderRadius: BorderRadius.circular(20)),
                   child: IconButton(
                       icon: Icon(Icons.share, color: Colors.white, size: 24),
-                      onPressed: () {}),
+                      onPressed: () async {
+                        await Share.share(widget.dataProduct["image"][_image]);
+                      }),
                 )),
             Positioned(
               top: size.height * 0.44,
@@ -174,8 +181,11 @@ class _ProductState extends State<Product> {
             //Divider(height: size.height * 0.05, color: Colors.white),
             Positioned(
               top: size.height * 0.6,
-              child:
-                  TextButton(onPressed: () {}, child: Text("Calcular frete")),
+              child: TextButton(
+                  onPressed: () async {
+                    await CalcularFrete().calcFrete();
+                  },
+                  child: Text("Calcular frete")),
             ),
             Positioned(
                 top: size.height * 0.67,
@@ -201,9 +211,7 @@ class _ProductState extends State<Product> {
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                           color: Colors.blue,
-                          onPressed: () async {
-                            await CalcularFrete().calcFrete();
-                          },
+                          onPressed: () {},
                         ))))
           ],
         ),
