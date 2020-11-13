@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 //---- Screens
 import 'package:linger/src/pages/home/Home.dart';
 import 'package:linger/src/pages/home/widgets/CreateProduct.dart';
-import 'package:linger/src/pages/market/Market.dart';
 import 'package:linger/src/pages/user/User.dart';
 
 class Nav extends StatefulWidget {
@@ -21,13 +20,8 @@ class _NavState extends State<Nav> {
         return Home();
         break;
       case 1:
-        return Market();
-        break;
-      case 2:
         return User();
         break;
-      default:
-        Home();
     }
   }
 
@@ -35,6 +29,7 @@ class _NavState extends State<Nav> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: _setScreen(_page),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _page == 0
@@ -74,8 +69,6 @@ class _NavState extends State<Nav> {
           },
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add_shopping_cart_sharp), label: "Cart Shop"),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "User")
           ]),
     );

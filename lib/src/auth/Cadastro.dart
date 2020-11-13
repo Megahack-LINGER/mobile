@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 
 //---- Screens
 import 'package:linger/src/Nav.dart';
@@ -17,8 +19,22 @@ class Cadastro extends StatefulWidget {
 class _CadastroState extends State<Cadastro> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
+  TextEditingController _controllerName = TextEditingController();
 
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  var city;
+
+  Future geolocation() async {
+    //---- GEOLOCATION
+    final currentPosition =
+        await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
+
+    final coordinates =
+        Coordinates(currentPosition.latitude, currentPosition.longitude);
+
+    city = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  }
 
   Future<File> getData() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -27,11 +43,19 @@ class _CadastroState extends State<Cadastro> {
 
   Future saveData() async {
     final file = await getData();
-    await file.writeAsStringSync(jsonEncode({
+    file.writeAsString(jsonEncode({
       "email": _controllerEmail.text,
       "name": _firebaseAuth.currentUser.displayName,
-      "image": _firebaseAuth.currentUser.photoURL
+      "image": _firebaseAuth.currentUser.photoURL,
+      "cidade": city[0].subAdminArea
     }));
+    print("Salvo dados user");
+  }
+
+  @override
+  void initState() {
+    geolocation();
+    super.initState();
   }
 
   @override
@@ -51,6 +75,23 @@ class _CadastroState extends State<Cadastro> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    Container(
+                      height: size.height * 0.065,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40)),
+                      child: TextField(
+                        keyboardType: TextInputType.name,
+                        controller: _controllerName,
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.person, color: Colors.blue),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue)),
+                            hintText: "Digite seu nome",
+                            contentPadding: EdgeInsets.all(18)),
+                      ),
+                    ),
+                    Divider(height: 20, color: Colors.white),
                     Container(
                       height: size.height * 0.065,
                       decoration: BoxDecoration(
@@ -103,7 +144,9 @@ class _CadastroState extends State<Cadastro> {
                                   .createUserWithEmailAndPassword(
                                       email: _controllerEmail.text,
                                       password: _controllerPassword.text);
-
+                              await FirebaseAuth.instance.currentUser
+                                  .updateProfile(
+                                      displayName: _controllerName.text);
                               await saveData();
 
                               await Navigator.pushAndRemoveUntil(

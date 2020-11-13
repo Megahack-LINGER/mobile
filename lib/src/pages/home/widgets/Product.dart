@@ -8,13 +8,12 @@ import 'package:share/share.dart';
 
 class Product extends StatefulWidget {
   Product({Key key, this.dataProduct}) : super(key: key);
-  final QueryDocumentSnapshot dataProduct;
+  final dataProduct;
   @override
   _ProductState createState() => _ProductState();
 }
 
 class _ProductState extends State<Product> {
-  PageController _pageController = PageController();
   int _image = 0;
 
   double destino = 0.0;
@@ -49,11 +48,11 @@ class _ProductState extends State<Product> {
                     );
                   },
                   options: CarouselOptions(
+                      enlargeCenterPage: true,
                       onPageChanged: (index, reason) {
                         setState(() {
-                          _image = reason.index;
+                          _image = index;
                         });
-                        print(_image + 1);
                       },
                       enableInfiniteScroll: false,
                       initialPage: 0)),
@@ -83,8 +82,8 @@ class _ProductState extends State<Product> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20)),
-                  child:
-                      Text("${_image}/${widget.dataProduct["image"].length}"),
+                  child: Text(
+                      "${_image + 1}/${widget.dataProduct["image"].length}"),
                 )),
             Positioned(
                 top: size.height * 0.4,
@@ -214,9 +213,28 @@ class _ProductState extends State<Product> {
                           color: Colors.blue,
                           onPressed: () async {
                             await showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20)),
+                                ),
                                 context: context,
                                 builder: (context) {
-                                  return Text("Eaee");
+                                  return Container(
+                                      width: size.width,
+                                      height: size.height * 0.3,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Image.network(
+                                            "https://blog.pluga.co/uploads/2020/07/mercado-pago-logo.png",
+                                            width: size.width * 0.9,
+                                          )
+                                        ],
+                                      ));
                                 });
                           },
                         ))))

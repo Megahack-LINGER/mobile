@@ -1,8 +1,12 @@
 //---- Packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:linger/src/pages/home/functions/get_products.dart';
+import 'package:linger/src/pages/home/functions/search_product.dart';
 import 'package:linger/src/pages/home/widgets/Product.dart';
+
+//---- Functions
+import 'package:linger/src/pages/home/functions/get_products.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,6 +14,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  QuerySnapshot produtos;
+  List produtosPesquisados = [];
+
+  Future searchProduct(String text) async {
+    if (produtosPesquisados.isEmpty) {
+      produtos = await GetProduct().getProducts();
+    }
+
+    setState(() {
+      produtosPesquisados.clear();
+    });
+
+    for (var x = 0; x < produtos.docs.length; x++) {
+      if (await produtos.docs[x]["title"].contains(text)) {
+        print(produtos.docs[x].data());
+        setState(() {
+          produtosPesquisados.add(produtos.docs[x].data());
+        });
+      }
+    }
+    return produtosPesquisados;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -73,6 +100,15 @@ class _HomeState extends State<Home> {
                             color: Colors.white,
                           ),
                           child: TextField(
+                            onChanged: (value) async {
+                              if (value.isEmpty) {
+                                setState(() {
+                                  produtosPesquisados.clear();
+                                });
+                              } else {
+                                await searchProduct(value);
+                              }
+                            },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -84,123 +120,208 @@ class _HomeState extends State<Home> {
                           ),
                         )),
                     Positioned(
-                      top: size.height * 0.28,
-                      child: Container(
-                          width: size.width,
-                          height: size.height * 0.7,
-                          child: ListView.builder(
-                            itemCount: snapshot.data.docs.length,
-                            padding:
-                                EdgeInsets.only(bottom: size.height * 0.11),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              if (index == 2 || index == 3) {
-                                return GestureDetector(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Product(
-                                                dataProduct: snapshot
-                                                    .data.docs[index]))),
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Colors.white, width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      elevation: 0.0,
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(8),
-                                            child: ClipRRect(
-                                              //Ou circular(20)
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              child: Image.network(
-                                                "${snapshot.data.docs[index]["image"][0]}",
-                                                filterQuality:
-                                                    FilterQuality.low,
-                                                fit: BoxFit.cover,
-                                                height: size.height * 0.1,
-                                                width: size.width * 0.2,
+                        top: size.height * 0.28,
+                        child: Container(
+                            width: size.width,
+                            height: size.height * 0.7,
+                            child: produtosPesquisados.length == 0
+                                ? ListView.builder(
+                                    itemCount: snapshot.data.docs.length,
+                                    padding: EdgeInsets.only(
+                                        bottom: size.height * 0.11),
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (context, index) {
+                                      if (index == 2 || index == 3) {
+                                        return GestureDetector(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Product(
+                                                            dataProduct:
+                                                                snapshot.data
+                                                                        .docs[
+                                                                    index]))),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              elevation: 0.0,
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: ClipRRect(
+                                                      //Ou circular(20)
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      child: Image.network(
+                                                        "${snapshot.data.docs[index]["image"][0]}",
+                                                        filterQuality:
+                                                            FilterQuality.low,
+                                                        fit: BoxFit.cover,
+                                                        height:
+                                                            size.height * 0.1,
+                                                        width: size.width * 0.2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListTile(
+                                                      title: Text(
+                                                          "${snapshot.data.docs[index]["title"]}",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .blue[800])),
+                                                      subtitle: Text(
+                                                          "${snapshot.data.docs[index]["subtitle"]}",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .blue[400])),
+                                                      trailing: Text(
+                                                        "R\S${snapshot.data.docs[index]["price"].toString().replaceAll(".", ",")} por Hora",
+                                                        style: TextStyle(
+                                                            color: Colors.blue),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: ListTile(
-                                              title: Text(
-                                                  "${snapshot.data.docs[index]["title"]}",
-                                                  style: TextStyle(
-                                                      color: Colors.blue[800])),
-                                              subtitle: Text(
-                                                  "${snapshot.data.docs[index]["subtitle"]}",
-                                                  style: TextStyle(
-                                                      color: Colors.blue[400])),
-                                              trailing: Text(
-                                                "R\S${snapshot.data.docs[index]["price"].toString().replaceAll(".", ",")} por Hora",
-                                                style: TextStyle(
-                                                    color: Colors.blue),
+                                            ));
+                                      } else {
+                                        return GestureDetector(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Product(
+                                                            dataProduct:
+                                                                snapshot.data
+                                                                        .docs[
+                                                                    index]))),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              elevation: 0.0,
+                                              child: Column(
+                                                children: [
+                                                  ClipRRect(
+                                                    //Ou circular(20)
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(20),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    20)),
+                                                    child: Image.network(
+                                                        "${snapshot.data.docs[index]["image"][0]}",
+                                                        filterQuality:
+                                                            FilterQuality.low,
+                                                        fit: BoxFit.cover,
+                                                        width: size.width * 0.9,
+                                                        height:
+                                                            size.height * 0.24),
+                                                  ),
+                                                  Center(
+                                                    child: ListTile(
+                                                      title: Text(
+                                                          "${snapshot.data.docs[index]["title"]}",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .blue[800])),
+                                                      subtitle: Text(
+                                                          "${snapshot.data.docs[index]["subtitle"]}",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .blue[400])),
+                                                      trailing: Text(
+                                                        "R\S${snapshot.data.docs[index]["price"].toString().replaceAll(".", ",")} por Hora",
+                                                        style: TextStyle(
+                                                            color: Colors.blue),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
+                                            ));
+                                      }
+                                    },
+                                  )
+                                : ListView.builder(
+                                    itemCount: produtosPesquisados.length,
+                                    padding: EdgeInsets.only(
+                                        bottom: size.height * 0.11),
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => Product(
+                                                      dataProduct:
+                                                          produtosPesquisados[
+                                                              index]))),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            elevation: 0.0,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: ClipRRect(
+                                                    //Ou circular(20)
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    child: Image.network(
+                                                      "${produtosPesquisados[index]["image"][0]}",
+                                                      filterQuality:
+                                                          FilterQuality.low,
+                                                      fit: BoxFit.cover,
+                                                      height: size.height * 0.1,
+                                                      width: size.width * 0.2,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: ListTile(
+                                                    title: Text(
+                                                        "${produtosPesquisados[index]["title"]}",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .blue[800])),
+                                                    subtitle: Text(
+                                                        "${produtosPesquisados[index]["subtitle"]}",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .blue[400])),
+                                                    trailing: Text(
+                                                      "R\S${produtosPesquisados[index]["price"].toString().replaceAll(".", ",")} por Hora",
+                                                      style: TextStyle(
+                                                          color: Colors.blue),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ));
-                              } else {
-                                return GestureDetector(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Product(
-                                                dataProduct: snapshot
-                                                    .data.docs[index]))),
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Colors.white, width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      elevation: 0.0,
-                                      child: Column(
-                                        children: [
-                                          ClipRRect(
-                                            //Ou circular(20)
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20)),
-                                            child: Image.network(
-                                                "${snapshot.data.docs[index]["image"][0]}",
-                                                filterQuality:
-                                                    FilterQuality.low,
-                                                fit: BoxFit.cover,
-                                                width: size.width * 0.9,
-                                                height: size.height * 0.24),
-                                          ),
-                                          Center(
-                                            child: ListTile(
-                                              title: Text(
-                                                  "${snapshot.data.docs[index]["title"]}",
-                                                  style: TextStyle(
-                                                      color: Colors.blue[800])),
-                                              subtitle: Text(
-                                                  "${snapshot.data.docs[index]["subtitle"]}",
-                                                  style: TextStyle(
-                                                      color: Colors.blue[400])),
-                                              trailing: Text(
-                                                "R\S${snapshot.data.docs[index]["price"].toString().replaceAll(".", ",")} por Hora",
-                                                style: TextStyle(
-                                                    color: Colors.blue),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ));
-                              }
-                            },
-                          )),
-                    )
+                                          ));
+                                    })))
                   ],
                 ),
               ),

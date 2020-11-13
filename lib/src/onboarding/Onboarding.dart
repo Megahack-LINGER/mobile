@@ -1,11 +1,6 @@
 //---- Packages
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 
 //---- Screens
 import 'package:linger/src/auth/Login.dart';
@@ -13,7 +8,6 @@ import 'package:linger/src/auth/Login.dart';
 //---- Widgets
 import 'package:linger/src/onboarding/widgets/subPage.dart';
 import 'package:location/location.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Onboarding extends StatefulWidget {
   @override

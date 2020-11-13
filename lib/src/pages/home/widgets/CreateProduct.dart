@@ -26,6 +26,7 @@ class _CreateProductState extends State<CreateProduct> {
   TextEditingController _especificationController = TextEditingController();
 
   var _form = GlobalKey<FormState>();
+  var _snack = GlobalKey<ScaffoldState>();
 
   //---- Functions
 
@@ -51,6 +52,7 @@ class _CreateProductState extends State<CreateProduct> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+        key: _snack,
         body: Container(
             padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             width: size.width,
@@ -187,9 +189,19 @@ class _CreateProductState extends State<CreateProduct> {
                                     child: RaisedButton.icon(
                                         color: Colors.blue,
                                         onPressed: () async {
-                                          final position = await Geolocator
-                                              .getCurrentPosition();
                                           if (_form.currentState.validate()) {
+                                            _snack.currentState
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                "Adicionando produto  ${_titleController.text}",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              duration: Duration(seconds: 10),
+                                              backgroundColor: Colors.blue,
+                                            ));
+                                            final position = await Geolocator
+                                                .getCurrentPosition();
                                             AddProduct addProduct =
                                                 AddProduct();
                                             var id = DateTime.now().toString();

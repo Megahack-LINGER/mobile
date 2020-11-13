@@ -10,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 //---- Screens
 import 'package:linger/src/Nav.dart';
 import 'package:linger/src/auth/Cadastro.dart';
-import 'package:linger/src/auth/ForgoutPassword.dart';
 
 class Login extends StatefulWidget {
   @override

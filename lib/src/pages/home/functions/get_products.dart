@@ -1,6 +1,6 @@
+//---- Packages
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,11 +20,11 @@ class GetProduct {
 
     final directory = await getApplicationDocumentsDirectory();
     final file = File("${directory.path}/data.json");
-    Map cityUser = await jsonDecode(file.readAsStringSync());
-    print(await cityUser["cidade"]);
+    Map dataUser = await jsonDecode(file.readAsStringSync());
+    print(await dataUser["cidade"]);
     return await firebaseFirestore
         .collection("products")
-        .where("cidade", isEqualTo: await cityUser["cidade"])
+        .where("cidade", isEqualTo: await dataUser["cidade"])
         .get();
   }
 
