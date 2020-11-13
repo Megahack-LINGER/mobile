@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:linger/src/pages/home/functions/search_product.dart';
 import 'package:linger/src/pages/home/widgets/Product.dart';
 
 //---- Functions
@@ -16,6 +15,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   QuerySnapshot produtos;
   List produtosPesquisados = [];
+
+  TextEditingController _searchController = TextEditingController();
 
   Future searchProduct(String text) async {
     if (produtosPesquisados.isEmpty) {
@@ -100,6 +101,7 @@ class _HomeState extends State<Home> {
                             color: Colors.white,
                           ),
                           child: TextField(
+                            controller: _searchController,
                             onChanged: (value) async {
                               if (value.isEmpty) {
                                 setState(() {
@@ -110,6 +112,14 @@ class _HomeState extends State<Home> {
                               }
                             },
                             decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                    icon: Icon(Icons.clear, color: Colors.blue),
+                                    onPressed: () {
+                                      setState(() {
+                                        _searchController.clear();
+                                        produtosPesquisados.clear();
+                                      });
+                                    }),
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color.fromRGBO(33, 150, 243, 1),
