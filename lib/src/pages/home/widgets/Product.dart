@@ -2,6 +2,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:linger/src/pages/home/functions/calc_frete.dart';
 import 'package:share/share.dart';
 
@@ -15,6 +16,10 @@ class Product extends StatefulWidget {
 class _ProductState extends State<Product> {
   PageController _pageController = PageController();
   int _image = 0;
+
+  double destino = 0.0;
+
+  TextEditingController _cepDestinoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class _ProductState extends State<Product> {
                       child: Image.network(
                         widget.dataProduct["image"][index],
                         filterQuality: FilterQuality.high,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     );
                   },
@@ -67,32 +72,7 @@ class _ProductState extends State<Product> {
                     Navigator.pop(context);
                   }),
             ),
-            Positioned(
-              top: size.height * 0.03,
-              left: size.width * 0.4,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.blue,
-                    size: 38,
-                  ),
-                  onPressed: () {
-                    print("Add Shopping");
-                  }),
-            ),
-            Positioned(
-              top: size.height * 0.03,
-              left: size.width * 0.8,
-              child: IconButton(
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.blue,
-                    size: 38,
-                  ),
-                  onPressed: () {
-                    print("Add favorite");
-                  }),
-            ),
+
             //------------ end 3 icons
             Positioned(
                 top: size.height * 0.1,
@@ -168,6 +148,7 @@ class _ProductState extends State<Product> {
                   width: size.width * 0.25,
                   height: size.height * 0.05,
                   child: TextFormField(
+                      controller: _cepDestinoController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           hintText: "CEP",
@@ -183,17 +164,37 @@ class _ProductState extends State<Product> {
               top: size.height * 0.6,
               child: TextButton(
                   onPressed: () async {
-                    await CalcularFrete().calcFrete();
+                    CalcularFrete calcularFrete = CalcularFrete();
+                    await calcularFrete.consultaCEP(
+                        _cepDestinoController.text,
+                        widget.dataProduct["cep_origem"],
+                        widget.dataProduct["latitude"],
+                        widget.dataProduct["longetude"]);
+                    setState(() {
+                      destino = calcularFrete.diference;
+                    });
                   },
                   child: Text("Calcular frete")),
+            ),
+            Positioned(
+              top: size.height * 0.62,
+              left: size.width * 0.5,
+              child: AnimatedCrossFade(
+                  firstChild: Text(""),
+                  secondChild: Text(
+                      "*Até ${(destino / 1000).toStringAsFixed(2)} KM ao destino",
+                      style: TextStyle(color: Colors.blue[400])),
+                  crossFadeState: destino == 0.0
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: Duration(seconds: 1)),
             ),
             Positioned(
                 top: size.height * 0.67,
                 child: Container(
                     width: size.width * 0.9,
                     child: Text(
-                      "Descrição do produto gkaskgksdkhgksdkhykerkgktoemgsdokkohgko" +
-                          "ksmdokmfdgokmokmsdkmgkmsdkmkksklhgklkmlsdklmgkmmskmmvmsommdfkgkdkmskmfksdkgsddmgçdmçgdfç",
+                      "${widget.dataProduct["describe"]}",
                       style: TextStyle(fontSize: 15, color: Colors.blue[700]),
                     ))),
             Positioned(
@@ -211,7 +212,13 @@ class _ProductState extends State<Product> {
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                           color: Colors.blue,
-                          onPressed: () {},
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Text("Eaee");
+                                });
+                          },
                         ))))
           ],
         ),

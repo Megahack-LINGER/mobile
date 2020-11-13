@@ -7,6 +7,7 @@ import 'package:linger/src/auth/Login.dart';
 
 //---- Widgets
 import 'package:linger/src/onboarding/widgets/subPage.dart';
+import 'package:location/location.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -15,6 +16,21 @@ class Onboarding extends StatefulWidget {
 
 class _OnboardingState extends State<Onboarding> {
   int _page = 0;
+  final location = Location.instance;
+
+  Future hasPermisao() async {
+    print(await location.hasPermission());
+    if (await location.hasPermission() == PermissionStatus.denied ||
+        await location.hasPermission() == PermissionStatus.deniedForever) {
+      await Location.instance.requestPermission();
+    }
+  }
+
+  @override
+  void initState() {
+    hasPermisao();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +63,7 @@ class _OnboardingState extends State<Onboarding> {
                   ],
                   options: CarouselOptions(
                       enlargeCenterPage: true,
-                      height: size.height * 0.6,
+                      height: size.height * 0.65,
                       autoPlay: true,
                       onPageChanged: (index, reason) {
                         setState(() {

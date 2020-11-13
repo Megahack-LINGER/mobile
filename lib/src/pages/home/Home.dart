@@ -11,11 +11,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
@@ -48,7 +43,7 @@ class _HomeState extends State<Home> {
                                     ? FirebaseAuth.instance.currentUser.photoURL
                                     : "",
                                 filterQuality: FilterQuality.high,
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 height: size.height * 0.14,
                                 width: size.width * 0.3,
                               )),
@@ -117,10 +112,12 @@ class _HomeState extends State<Home> {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           child: Image.network(
-                                              "${snapshot.data.docs[index]["image"][0]}",
-                                              filterQuality: FilterQuality.high,
-                                              fit: BoxFit.contain,
-                                              height: size.height * 0.1),
+                                            "${snapshot.data.docs[index]["image"][0]}",
+                                            filterQuality: FilterQuality.high,
+                                            fit: BoxFit.cover,
+                                            height: size.height * 0.1,
+                                            width: size.width * 0.2,
+                                          ),
                                         ),
                                       ),
                                       Expanded(
@@ -167,7 +164,7 @@ class _HomeState extends State<Home> {
                                         child: Image.network(
                                             "${snapshot.data.docs[index]["image"][0]}",
                                             filterQuality: FilterQuality.high,
-                                            fit: BoxFit.fill,
+                                            fit: BoxFit.cover,
                                             width: size.width * 0.9,
                                             height: size.height * 0.24),
                                       ),

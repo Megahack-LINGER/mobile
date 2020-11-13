@@ -49,7 +49,7 @@ class _NavState extends State<Nav> {
                   decoration: BoxDecoration(
                       color: Color.fromRGBO(33, 150, 243, 1),
                       borderRadius: BorderRadius.circular(40)),
-                  width: size.width * 0.31,
+                  width: size.width * 0.32,
                   height: size.height * 0.05,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
