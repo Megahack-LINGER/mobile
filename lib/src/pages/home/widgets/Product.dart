@@ -75,7 +75,7 @@ class _ProductState extends State<Product> {
             //------------ end 3 icons
             Positioned(
                 top: size.height * 0.1,
-                left: size.width * 0.15,
+                left: size.width * 0.2,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   width: size.width * 0.1,

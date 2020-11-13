@@ -17,6 +17,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool _obscureText = true;
+
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -66,10 +68,11 @@ class _LoginState extends State<Login> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                "https://cdn.discordapp.com/attachments/769682105948438601/775794281654779914/SPOILER_LINGER_VETOR.png",
+              Image.asset(
+                "assets/images/LINGER_VETOR.png",
               ),
-              Text("Bem vindo de volta"),
+              Text("Bem vindo de volta",
+                  style: TextStyle(color: Colors.blue, fontSize: 18)),
               Divider(color: Colors.white),
               Container(
                 padding: EdgeInsets.all(16),
@@ -99,9 +102,17 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(40)),
                       child: TextField(
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
+                        obscureText: _obscureText,
                         controller: _controllerPassword,
                         decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(Icons.remove_red_eye,
+                                    color: Colors.blue),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                }),
                             prefixIcon: Icon(Icons.vpn_key, color: Colors.blue),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue)),
@@ -119,7 +130,6 @@ class _LoginState extends State<Login> {
                       color: Colors.blue,
                       splashColor: Colors.blue[100],
                       onPressed: () async {
-                        print(_controllerPassword.text);
                         try {
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(

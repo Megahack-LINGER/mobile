@@ -67,10 +67,9 @@ class _CadastroState extends State<Cadastro> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                "https://cdn.discordapp.com/attachments/769682105948438601/775794281654779914/SPOILER_LINGER_VETOR.png",
+              Image.asset(
+                "assets/images/LINGER_VETOR.png",
               ),
-              Divider(color: Colors.white),
               Container(
                 padding: EdgeInsets.all(16),
                 child: Column(

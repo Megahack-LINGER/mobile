@@ -21,7 +21,6 @@ class _CreateProductState extends State<CreateProduct> {
   TextEditingController _subtitleController = TextEditingController();
   TextEditingController _describeController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
-  TextEditingController _weightController = TextEditingController();
   TextEditingController _cepOrigemController = TextEditingController();
   TextEditingController _especificationController = TextEditingController();
 
@@ -118,12 +117,22 @@ class _CreateProductState extends State<CreateProduct> {
                                     color: Colors.blue, fontSize: 16)),
                           )
                         : Text(""),
-                    Center(
-                      child: IconButton(
-                          icon: Icon(Icons.camera, color: Colors.blue),
-                          onPressed: () async {
-                            await image();
-                          }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            tooltip: "Adicionar Imagem da camerâ",
+                            icon: Icon(Icons.camera, color: Colors.blue),
+                            onPressed: () async {
+                              await image();
+                            }),
+                        IconButton(
+                            tooltip: "Adicionar Imagem da galeria",
+                            icon: Icon(Icons.attachment, color: Colors.blue),
+                            onPressed: () async {
+                              await galery();
+                            }),
+                      ],
                     ),
                     formulario(
                         "Digite o título",
@@ -144,7 +153,7 @@ class _CreateProductState extends State<CreateProduct> {
                         size.height * 0.06),
                     Divider(color: Colors.white),
                     formulario(
-                        "Digite o preço",
+                        "Digite o preço por hora",
                         1,
                         _priceController,
                         TextInputType.number,

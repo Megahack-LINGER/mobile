@@ -337,11 +337,15 @@ class _HomeState extends State<Home> {
               ),
               onRefresh: GetProduct().getProducts);
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return Padding(
+            padding: EdgeInsets.only(
+                top: size.height * 0.5, left: size.width * 0.45),
             child: CircularProgressIndicator(),
           );
         } else {
-          return Center(
+          return Padding(
+            padding:
+                EdgeInsets.only(top: size.height * 0.5, left: size.width * 0.5),
             child: Text("Erro"),
           );
         }
