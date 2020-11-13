@@ -53,6 +53,7 @@ class _ProductState extends State<Product> {
                         setState(() {
                           _image = reason.index;
                         });
+                        print(_image + 1);
                       },
                       enableInfiniteScroll: false,
                       initialPage: 0)),
@@ -68,7 +69,6 @@ class _ProductState extends State<Product> {
                     size: 38,
                   ),
                   onPressed: () {
-                    print("eae");
                     Navigator.pop(context);
                   }),
             ),
@@ -83,8 +83,8 @@ class _ProductState extends State<Product> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                      "${_image + 1}/${widget.dataProduct["image"].length}"),
+                  child:
+                      Text("${_image}/${widget.dataProduct["image"].length}"),
                 )),
             Positioned(
                 top: size.height * 0.4,

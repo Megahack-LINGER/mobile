@@ -1,35 +1,30 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:path_provider/path_provider.dart';
 
 class GetProduct {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   Future getProducts() async {
-    final currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-        forceAndroidLocationManager: true);
-    currentPosition;
-
-    final coordinates =
-        Coordinates(currentPosition.latitude, currentPosition.longitude);
-
-    final city = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    /*try {
     print("-------------------------------------------");
-    try {
       print("Estado: " + city[0].adminArea);
       print("Cordenada: ${city[0].coordinates}");
       print("Cidade: " + city[0].subAdminArea);
     } catch (e) {
       print(e);
-    }
     print("-------------------------------------------");
+    }*/
 
-    //.where("cidade", isEqualTo: city)
-
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File("${directory.path}/data.json");
+    Map cityUser = await jsonDecode(file.readAsStringSync());
+    print(await cityUser["cidade"]);
     return await firebaseFirestore
         .collection("products")
-        .where("cidade", isEqualTo: city[0].subAdminArea)
+        .where("cidade", isEqualTo: await cityUser["cidade"])
         .get();
   }
 

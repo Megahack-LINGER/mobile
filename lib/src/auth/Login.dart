@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart';
 
 //---- Screens
@@ -21,6 +23,19 @@ class _LoginState extends State<Login> {
 
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  var city;
+
+  Future geolocation() async {
+    //---- GEOLOCATION
+    final currentPosition =
+        await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
+
+    final coordinates =
+        Coordinates(currentPosition.latitude, currentPosition.longitude);
+
+    city = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  }
+
   Future<File> getData() async {
     final directory = await getApplicationDocumentsDirectory();
     return File("${directory.path}/data.json");
@@ -31,9 +46,16 @@ class _LoginState extends State<Login> {
     file.writeAsString(jsonEncode({
       "email": _controllerEmail.text,
       "name": _firebaseAuth.currentUser.displayName,
-      "image": _firebaseAuth.currentUser.photoURL
+      "image": _firebaseAuth.currentUser.photoURL,
+      "cidade": city[0].subAdminArea
     }));
-    print("salvo");
+    print("Salvo dados user");
+  }
+
+  @override
+  void initState() {
+    geolocation();
+    super.initState();
   }
 
   @override
